@@ -279,7 +279,7 @@ void NewgroundsBrowserLayer::updateArrows()
 
 void NewgroundsBrowserLayer::setTitle(const char* title)
 {
-    //auto titleLbl = getChildOfType<CCLabelBMFont>(list, 0);
+    //auto titleLbl = list->getChildByType<CCLabelBMFont>(0);
 
     //titleLbl->setString(title);
 }
