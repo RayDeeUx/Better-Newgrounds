@@ -115,9 +115,12 @@ void API::getPopularSongs(int page, SEL_MenuHandler event, CCObject* sender)
     listener.bind([page, this, event, sender] (web::WebTask::Event* e) {
         if (web::WebResponse* res = e->getValue()) {
             auto json = res->json().unwrap();
-            auto str = json.as_object()["content"].as_string();
+            auto str = json["content"].asString().unwrapOr("FOOBARBAZ");
 
-            totalCount = json.as_object()["total"].as_int();
+            if (str == "FOOBARBAZ") return;
+
+            totalCount = json["total"].asInt().unwrapOr(-2000);
+            if (totalCount == -2000) return;
 
             if (popularSongs.contains(page))
                 popularSongs.erase(page);
@@ -252,9 +255,11 @@ void API::getFeaturedSongs(int page, SEL_MenuHandler event, CCObject* sender)
     listener.bind([page, this, event, sender] (web::WebTask::Event* e) {
         if (web::WebResponse* res = e->getValue()) {
             auto json = res->json().unwrap();
-            auto str = json.as_object()["content"].as_string();
+            auto str = json["content"].asString().unwrapOr("FOOBARBAZ");
+            if (str == "FOOBARBAZ") return;
 
-            totalCountFeatured = json.as_object()["total"].as_int();
+            totalCountFeatured = json["total"].asInt().unwrapOr(-2000);
+            if (totalCountFeatured == -2000) return;
 
             if (featuredSongs.contains(page))
                 featuredSongs.erase(page);
@@ -391,7 +396,7 @@ void API::getArtistSongs(std::string name, int page, SEL_MenuHandler event, CCOb
     listener.bind([page, name, this, event, sender] (web::WebTask::Event* e) {
         if (web::WebResponse* res = e->getValue()) {
             auto json = res->json().unwrap();
-            auto items = json.as_object()["items"].as_object();
+            auto items = json["items"];
 
             if (artists[name].songs.contains(page))
                 artists[name].songs.erase(page);
