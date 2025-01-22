@@ -404,10 +404,9 @@ void API::getArtistSongs(std::string name, int page, SEL_MenuHandler event, CCOb
             if (json["load_more"].asString().unwrapOrDefault() == "\n")
                 artists[name].lastPage = page;
 
-            for (auto& [yearDummy, item] : items)
+            for (auto& [year, item] : items)
             {
-                auto year = yearDummy.asArray();
-                if (!year.isOk()) continue;
+                if (!year.isArray()) continue;
 
                 for (auto& song2 : year)
                 {
