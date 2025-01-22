@@ -62,7 +62,7 @@ void AudioWaveformNode::generateSampleData()
     sound->readData(data, length, &length);
 
     FMOD::Channel* channel;
-    engine->m_system->playSound(sound, channelGroup, true, &channel);
+    engine->m_system->playSound(sound, nullptr, true, &channel);
 
     sound->release();
     sound = nullptr;
