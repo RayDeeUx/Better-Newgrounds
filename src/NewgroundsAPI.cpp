@@ -401,16 +401,17 @@ void API::getArtistSongs(std::string name, int page, SEL_MenuHandler event, CCOb
             if (artists[name].songs.contains(page))
                 artists[name].songs.erase(page);
 
-            if (json.as_object()["load_more"].as_string() == "\n")
+            if (json["load_more"].asString().unwrapOrDefault() == "\n")
                 artists[name].lastPage = page;
 
-            for (auto item : items)
+            for (auto& [yearDummy, item] : items)
             {
-                auto year = item.second.as_array();
+                auto year = yearDummy.asArray();
+                if (!year.isOk()) continue;
 
-                for (auto song2 : year)
+                for (auto& song2 : year)
                 {
-                    auto str = song2.as_string();
+                    auto str = song2.asString().unwrapOrDefault();
 
                     tinyxml2::XMLDocument doc;
                     auto result = doc.Parse(str.c_str());
