@@ -31,8 +31,7 @@ void AudioWaveformNode::generateSampleData()
 {
     auto engine = FMODAudioEngine::sharedEngine();
 
-    if (!engine || !engine->m_system || !engine->m_sound)
-        return;
+    if (!engine || !engine->m_system) return;
 
     FMOD::Sound* sound;
     const FMOD_MODE mode = FMOD_DEFAULT | FMOD_CREATESAMPLE | FMOD_OPENONLY;
@@ -62,10 +61,8 @@ void AudioWaveformNode::generateSampleData()
     int8_t* data = new int8_t[length];
     sound->readData(data, length, &length);
 
-    FMOD::ChannelGroup* channelGroup;
-    engine->m_globalChannel->getChannelGroup(&channelGroup);
-    engine->m_system->playSound(sound, channelGroup, true, &engine->m_globalChannel);
-    engine->m_globalChannel->getFrequency(&sampleRate);
+    FMOD::Channel* channel;
+    engine->m_system->playSound(sound, channelGroup, true, &channel);
 
     sound->release();
     sound = nullptr;
